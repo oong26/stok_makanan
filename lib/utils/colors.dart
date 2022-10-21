@@ -6,3 +6,4 @@ const mWarningColor = Color(0XFFFFD233);
 const mOrangeColor = Color(0XFFE0742D);
 const mGreyColor = Color(0XFF9F9F9F);
 const mSmokeWhiteColor = Color(0XFFD9D9D9);
+const mBlueColor = Color(0XFF89D2F1);

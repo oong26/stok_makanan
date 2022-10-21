@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:stok_makanan/utils/colors.dart';
+import 'package:stok_makanan/utils/styles.dart';
+import 'package:stok_makanan/widgets/my_button.dart';
+
+import 'widgets/my_table.dart';
 
 void main() {
   runApp(const MyApp());
@@ -95,13 +100,70 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            MyButton(
+              onPressed: () {},
+              icon: Icons.add,
+              text: 'Tambah',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            const MyTable(),
+            SizedBox(
+              width: 500,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  suffixIcon: Icon(
+                    Icons.keyboard_arrow_down_outlined,
+                    color: Colors.black,
+                  ),
+                  label: Text(
+                    'Tanggal',
+                    style: inputTextStyle.copyWith(
+                        color: Colors.black.withOpacity(0.5)),
+                  ),
+                  hintText: 'dd/mm/yy',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
             ),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  'Simpan',
+                  style: bigButtonTextStyle.copyWith(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: mPrimaryColor,
+                  padding: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  'Batal',
+                  style: bigButtonTextStyle,
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  padding: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: mPrimaryColor,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

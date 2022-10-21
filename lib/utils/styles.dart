@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stok_makanan/utils/colors.dart';
 
 var titleTextStyle = GoogleFonts.petrona(
   color: Colors.white,
@@ -48,4 +49,10 @@ var buttonTextStyle = GoogleFonts.plusJakartaSans(
   color: Colors.black,
   fontWeight: FontWeight.w400,
   fontSize: 13,
+);
+
+var bigButtonTextStyle = GoogleFonts.plusJakartaSans(
+  color: mPrimaryColor,
+  fontWeight: FontWeight.w600,
+  fontSize: 20,
 );
