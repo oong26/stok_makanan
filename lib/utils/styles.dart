@@ -20,6 +20,12 @@ var sectionBodyTextStyle = GoogleFonts.petrona(
   fontSize: 40,
 );
 
+var cardTextStyle = GoogleFonts.petrona(
+  color: mPrimaryColor,
+  fontWeight: FontWeight.w800,
+  fontSize: 96,
+);
+
 var formTitleTextStyle = GoogleFonts.plusJakartaSans(
   color: Colors.black,
   fontWeight: FontWeight.w700,

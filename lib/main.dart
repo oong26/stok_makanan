@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:stok_makanan/pages/detail_makanan_page.dart';
 import 'package:stok_makanan/pages/input_makanan_page.dart';
 import 'package:stok_makanan/pages/list_makanan_page.dart';
 import 'package:stok_makanan/pages/splash_page.dart';
+import 'package:stok_makanan/pages/stok_makanan_page.dart';
 import 'package:stok_makanan/utils/colors.dart';
 import 'package:stok_makanan/utils/constants.dart';
 import 'package:stok_makanan/utils/styles.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         splashRoute: (context) => const SplashPage(),
         listMakananRoute: (context) => const ListMakananPage(),
         inputMakananRoute: (context) => const InputMakananPage(),
+        detailMakananRoute: (context) => const DetailMakananPage(),
+        stokMakananRoute: (context) => const StokMakananPage(),
       },
     );
   }
