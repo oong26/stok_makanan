@@ -119,6 +119,8 @@ class _ListMakananPageState extends State<ListMakananPage> {
             child: SizedBox(
               width: 500,
               child: TextFormField(
+                onChanged: (val) =>
+                    BlocProvider.of<FetchMakananCubit>(context).fetch(q: val),
                 decoration: InputDecoration(
                   prefixIcon: const Icon(
                     Icons.search_rounded,

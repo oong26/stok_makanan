@@ -9,12 +9,12 @@ class FetchMakananCubit extends Cubit<FetchMakananState> {
   MakananRepository repo;
   FetchMakananCubit(this.repo) : super(FetchMakananInitial());
 
-  void fetch() async {
+  void fetch({String q = ''}) async {
     if (state is FetchMakananLoading) return;
 
     emit(FetchMakananLoading());
 
-    var res = await repo.fetch();
+    var res = await repo.fetch(q: q);
 
     if (res.status == 1) {
       emit(FetchMakananSuccess(data: res.data!));

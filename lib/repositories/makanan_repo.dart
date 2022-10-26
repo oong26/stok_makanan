@@ -7,8 +7,9 @@ import 'package:stok_makanan/utils/constants.dart';
 class MakananRepository {
   MakananRepository();
 
-  Future<ListMakananModel> fetch() async {
-    var url = Uri.http(DOMAIN, '/stok_makanan_api/list.php');
+  Future<ListMakananModel> fetch({String q = ''}) async {
+    var queryParams = {'q': q};
+    var url = Uri.http(DOMAIN, '/stok_makanan_api/list.php', queryParams);
     var res = await http.get(url);
 
     try {
