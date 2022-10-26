@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
+import 'package:stok_makanan/cubit/store_makanan_cubit.dart';
 import 'package:stok_makanan/pages/detail_makanan_page.dart';
 import 'package:stok_makanan/pages/input_makanan_page.dart';
 import 'package:stok_makanan/pages/list_makanan_page.dart';
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
             create: (context) => FetchMakananCubit(MakananRepository())),
+        BlocProvider(
+            create: (context) => StoreMakananCubit(MakananRepository())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
