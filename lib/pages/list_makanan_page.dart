@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stok_makanan/cubit/delete_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
 import 'package:stok_makanan/models/list_makanan_model.dart';
 import 'package:stok_makanan/models/makanan_model.dart';
@@ -29,52 +30,75 @@ class _ListMakananPageState extends State<ListMakananPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildSearchBar(),
-              const SizedBox(height: 56),
-              MyButton(
-                onPressed: () => Navigator.pushNamed(context, inputMakananRoute)
-                    .then((value) =>
-                        BlocProvider.of<FetchMakananCubit>(context).fetch()),
-                icon: Icons.add,
-                text: 'Tambah',
-              ),
-              const SizedBox(height: 11),
-              BlocConsumer<FetchMakananCubit, FetchMakananState>(
-                listener: (context, state) {
-                  if (state is FetchMakananError) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        state.message,
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: Colors.white,
+        child: BlocListener<DeleteMakananCubit, DeleteMakananState>(
+          listener: (context, state) {
+            if (state is DeleteMakananSuccess) {
+              BlocProvider.of<FetchMakananCubit>(context).fetch();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Berhasil',
+                    style:
+                        GoogleFonts.poppins(fontSize: 12, color: Colors.white)),
+                backgroundColor: Colors.green,
+              ));
+            }
+
+            if (state is DeleteMakananError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Gagal',
+                    style:
+                        GoogleFonts.poppins(fontSize: 12, color: Colors.white)),
+                backgroundColor: Colors.red,
+              ));
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildSearchBar(),
+                const SizedBox(height: 56),
+                MyButton(
+                  onPressed: () => Navigator.pushNamed(
+                          context, inputMakananRoute)
+                      .then((value) =>
+                          BlocProvider.of<FetchMakananCubit>(context).fetch()),
+                  icon: Icons.add,
+                  text: 'Tambah',
+                ),
+                const SizedBox(height: 11),
+                BlocConsumer<FetchMakananCubit, FetchMakananState>(
+                  listener: (context, state) {
+                    if (state is FetchMakananError) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          state.message,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.red,
-                    ));
-                  }
-                },
-                builder: (context, state) {
-                  List<MakananModel> data = [];
+                        backgroundColor: Colors.red,
+                      ));
+                    }
+                  },
+                  builder: (context, state) {
+                    List<MakananModel> data = [];
 
-                  if (state is FetchMakananLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+                    if (state is FetchMakananLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                  if (state is FetchMakananSuccess) {
-                    data = state.data;
-                  }
+                    if (state is FetchMakananSuccess) {
+                      data = state.data;
+                    }
 
-                  return _buildTable(data);
-                },
-              ),
-            ],
+                    return _buildTable(data);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -227,7 +251,9 @@ class _ListMakananPageState extends State<ListMakananPage> {
                     SizedBox(
                       width: 110,
                       child: MyButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            BlocProvider.of<DeleteMakananCubit>(context)
+                                .delete(id: data[i].id),
                         text: 'Hapus',
                         icon: Icons.delete,
                         color: mDangerColor,
