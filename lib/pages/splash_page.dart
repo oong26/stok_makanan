@@ -26,8 +26,8 @@ class _SplashPageState extends State<SplashPage> {
   _loadWidget() async {
     var loadingDuration = const Duration(seconds: 1);
     Timer.periodic(loadingDuration, (Timer t) {
-      setState(() => progres += 20);
-      print(progres);
+      // setState(() => progres += 20);
+      progres += 20;
       if (progres == 100) {
         Navigator.pushNamedAndRemoveUntil(
             context, listMakananRoute, (route) => false);
@@ -45,7 +45,7 @@ class _SplashPageState extends State<SplashPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              'images/logo.png',
+              'assets/images/logo.png',
               width: 448,
               height: 448,
               fit: BoxFit.cover,

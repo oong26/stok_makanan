@@ -60,7 +60,7 @@ class _StokMakananPageState extends State<StokMakananPage> {
             alignment: Alignment.centerLeft,
             width: MediaQuery.of(context).size.width * 0.4,
             child: Image.asset(
-              'images/logo.png',
+              'assets/images/logo.png',
               width: 100,
               height: 100,
             ),

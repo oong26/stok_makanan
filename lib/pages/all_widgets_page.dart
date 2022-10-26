@@ -44,7 +44,7 @@ class _AllWidgetsPageState extends State<AllWidgetsPage> {
               width: 500,
               child: TextFormField(
                 decoration: InputDecoration(
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     Icons.keyboard_arrow_down_outlined,
                     color: Colors.black,
                   ),
@@ -89,7 +89,7 @@ class _AllWidgetsPageState extends State<AllWidgetsPage> {
                   primary: Colors.white,
                   padding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
+                    side: const BorderSide(
                       color: mPrimaryColor,
                       width: 1,
                     ),

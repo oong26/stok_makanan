@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stok_makanan/utils/colors.dart';
 import 'package:stok_makanan/utils/constants.dart';
 import 'package:stok_makanan/utils/styles.dart';
@@ -11,6 +12,24 @@ class InputMakananPage extends StatefulWidget {
 }
 
 class _InputMakananPageState extends State<InputMakananPage> {
+  final _form = GlobalKey<FormState>();
+  final _tfTglController =
+      TextEditingController(text: dateFormat.format(DateTime.now()));
+  final _tfShiftController = TextEditingController();
+  final _tfKategoriController = TextEditingController();
+  final _tfStokController = TextEditingController();
+  final _tfNamaController = TextEditingController();
+  final _tfDetailController = TextEditingController();
+  final _tfUploadController = TextEditingController();
+
+  List<String> _dropdownItems = [
+    'Pilih Kategori',
+    'A',
+    'B',
+  ];
+
+  String _selectedKategori = 'Pilih Kategori';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +37,7 @@ class _InputMakananPageState extends State<InputMakananPage> {
         child: Padding(
           padding: const EdgeInsets.all(30),
           child: Form(
+            key: _form,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,6 +59,8 @@ class _InputMakananPageState extends State<InputMakananPage> {
                   SizedBox(
                     width: 418,
                     child: TextFormField(
+                      controller: _tfTglController,
+                      readOnly: true,
                       decoration: InputDecoration(
                         suffixIcon: const Icon(
                           Icons.date_range,
@@ -62,6 +84,8 @@ class _InputMakananPageState extends State<InputMakananPage> {
                       SizedBox(
                         width: 292,
                         child: TextFormField(
+                          controller: _tfShiftController,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             suffixIcon: const Icon(
                               Icons.keyboard_arrow_down_rounded,
@@ -80,24 +104,34 @@ class _InputMakananPageState extends State<InputMakananPage> {
                         ),
                       ),
                       const SizedBox(width: 70),
-                      SizedBox(
+                      Container(
                         width: 292,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: Colors.black,
-                            ),
-                            label: Text(
-                              'Kategori Menu',
-                              style: inputTextStyle.copyWith(
-                                  color: Colors.black.withOpacity(0.5)),
-                            ),
-                            hintText: 'A',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: DropdownButton(
+                          underline: Container(),
+                          isExpanded: true,
+                          items: _dropdownItems
+                              .map(
+                                (e) => DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      e,
+                                      style: inputTextStyle.copyWith(
+                                          color: Colors.black.withOpacity(0.5)),
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          value: _selectedKategori,
+                          onChanged: (String? value) {
+                            setState(() => _selectedKategori = value!);
+                          },
                         ),
                       ),
                     ],
@@ -108,6 +142,8 @@ class _InputMakananPageState extends State<InputMakananPage> {
                       SizedBox(
                         width: 292,
                         child: TextFormField(
+                          controller: _tfStokController,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             suffixIcon: const Icon(
                               Icons.keyboard_arrow_down_rounded,
@@ -129,6 +165,7 @@ class _InputMakananPageState extends State<InputMakananPage> {
                       SizedBox(
                         width: 292,
                         child: TextFormField(
+                          controller: _tfNamaController,
                           decoration: InputDecoration(
                             suffixIcon: const Icon(
                               Icons.keyboard_arrow_down_rounded,
@@ -152,7 +189,31 @@ class _InputMakananPageState extends State<InputMakananPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: TextFormField(
+                      controller: _tfDetailController,
+                      focusNode: FocusNode(
+                        onKey: (node, event) {
+                          if (event.isKeyPressed(LogicalKeyboardKey.enter) ||
+                              event.isKeyPressed(
+                                  LogicalKeyboardKey.numpadEnter)) {
+                            _tfDetailController.text += '\n$listDot';
+                            _tfDetailController.selection =
+                                TextSelection.collapsed(
+                                    offset: _tfDetailController.text.length);
+                          } else {
+                            return KeyEventResult.ignored;
+                          }
+                          return KeyEventResult.handled;
+                        },
+                      ),
                       maxLines: 5,
+                      onChanged: (val) {
+                        print('onchaged');
+                        if (val.length == 1) {
+                          // print('le');
+                          _tfDetailController.text.padLeft(1, listDot);
+                          setState(() {});
+                        }
+                      },
                       decoration: InputDecoration(
                         label: Text(
                           'Detail Menu',
@@ -170,6 +231,7 @@ class _InputMakananPageState extends State<InputMakananPage> {
                   SizedBox(
                     width: 292,
                     child: TextFormField(
+                      controller: _tfUploadController,
                       readOnly: true,
                       decoration: InputDecoration(
                         suffixIcon: const Icon(
