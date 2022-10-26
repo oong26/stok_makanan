@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 const String splashRoute = '/';
 const String listMakananRoute = '/makanan';
 const String inputMakananRoute = '/makanan/create';
+const String editMakananRoute = '/makanan/edit';
 const String detailMakananRoute = '/makanan/detail';
 const String stokMakananRoute = '/makanan/stok';
 

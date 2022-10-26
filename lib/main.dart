@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stok_makanan/cubit/delete_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/store_makanan_cubit.dart';
+import 'package:stok_makanan/cubit/update_makanan_cubit.dart';
 import 'package:stok_makanan/pages/detail_makanan_page.dart';
+import 'package:stok_makanan/pages/edit_makanan_page.dart';
 import 'package:stok_makanan/pages/input_makanan_page.dart';
 import 'package:stok_makanan/pages/list_makanan_page.dart';
 import 'package:stok_makanan/pages/splash_page.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
             create: (context) => StoreMakananCubit(MakananRepository())),
         BlocProvider(
             create: (context) => DeleteMakananCubit(MakananRepository())),
+        BlocProvider(
+            create: (context) => UpdateMakananCubit(MakananRepository())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

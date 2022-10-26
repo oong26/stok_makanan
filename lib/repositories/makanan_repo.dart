@@ -33,6 +33,19 @@ class MakananRepository {
     }
   }
 
+  Future<ResponseModel> update({required String body}) async {
+    var url = Uri.http(DOMAIN, '/stok_makanan_api/update.php');
+    var res = await http.post(url, body: body, headers: defaultHeader);
+
+    try {
+      return responseModelFromJson(res.body);
+    } catch (e) {
+      debugPrint('Response error : $e');
+
+      return responseModelFromJson(res.body);
+    }
+  }
+
   Future<ResponseModel> destroy({required String id}) async {
     var queryParams = {'id': id};
     var url = Uri.http(DOMAIN, '/stok_makanan_api/delete.php', queryParams);

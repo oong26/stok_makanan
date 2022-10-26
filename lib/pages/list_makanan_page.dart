@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stok_makanan/cubit/delete_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
+import 'package:stok_makanan/cubit/update_makanan_cubit.dart';
 import 'package:stok_makanan/models/list_makanan_model.dart';
 import 'package:stok_makanan/models/makanan_model.dart';
+import 'package:stok_makanan/pages/edit_makanan_page.dart';
 import 'package:stok_makanan/repositories/makanan_repo.dart';
 import 'package:stok_makanan/utils/colors.dart';
 import 'package:stok_makanan/utils/constants.dart';
@@ -241,7 +243,20 @@ class _ListMakananPageState extends State<ListMakananPage> {
                     SizedBox(
                       width: 110,
                       child: MyButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditMakananPage(
+                                      id: data[i].id,
+                                      nama: data[i].nama,
+                                      kategori: data[i].kategoriMenu,
+                                      stok: data[i].stok,
+                                      detail: data[i].detail,
+                                      filename: data[i].gambar,
+                                      shift: data[i].shift,
+                                    ))).then((value) =>
+                            BlocProvider.of<FetchMakananCubit>(context)
+                                .fetch()),
                         text: 'Edit',
                         icon: Icons.edit,
                         color: mWarningColor,
