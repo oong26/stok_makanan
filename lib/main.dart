@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stok_makanan/cubit/delete_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
+import 'package:stok_makanan/cubit/kurangi_stok_cubit.dart';
 import 'package:stok_makanan/cubit/store_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/update_makanan_cubit.dart';
-import 'package:stok_makanan/pages/detail_makanan_page.dart';
-import 'package:stok_makanan/pages/edit_makanan_page.dart';
 import 'package:stok_makanan/pages/input_makanan_page.dart';
 import 'package:stok_makanan/pages/list_makanan_page.dart';
 import 'package:stok_makanan/pages/splash_page.dart';
@@ -33,6 +32,8 @@ class MyApp extends StatelessWidget {
             create: (context) => DeleteMakananCubit(MakananRepository())),
         BlocProvider(
             create: (context) => UpdateMakananCubit(MakananRepository())),
+        BlocProvider(
+            create: (context) => KurangiStokCubit(MakananRepository())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -53,7 +54,6 @@ class MyApp extends StatelessWidget {
           splashRoute: (context) => const SplashPage(),
           listMakananRoute: (context) => const ListMakananPage(),
           inputMakananRoute: (context) => const InputMakananPage(),
-          detailMakananRoute: (context) => const DetailMakananPage(),
           stokMakananRoute: (context) => const StokMakananPage(),
         },
       ),

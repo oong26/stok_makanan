@@ -60,4 +60,19 @@ class MakananRepository {
       return responseModelFromJson(res.body);
     }
   }
+
+  Future<ResponseModel> subtractStock({required String id}) async {
+    var queryParams = {'id': id};
+    var url =
+        Uri.http(DOMAIN, '/stok_makanan_api/subtract_stock.php', queryParams);
+    var res = await http.post(url, headers: defaultHeader);
+
+    try {
+      return responseModelFromJson(res.body);
+    } catch (e) {
+      debugPrint('Response error : $e');
+
+      return responseModelFromJson(res.body);
+    }
+  }
 }

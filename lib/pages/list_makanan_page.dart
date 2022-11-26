@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stok_makanan/cubit/delete_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
-import 'package:stok_makanan/cubit/update_makanan_cubit.dart';
-import 'package:stok_makanan/models/list_makanan_model.dart';
 import 'package:stok_makanan/models/makanan_model.dart';
+import 'package:stok_makanan/pages/detail_makanan_page.dart';
 import 'package:stok_makanan/pages/edit_makanan_page.dart';
-import 'package:stok_makanan/repositories/makanan_repo.dart';
 import 'package:stok_makanan/utils/colors.dart';
 import 'package:stok_makanan/utils/constants.dart';
 import 'package:stok_makanan/utils/styles.dart';
@@ -25,6 +23,39 @@ class _ListMakananPageState extends State<ListMakananPage> {
   void initState() {
     super.initState();
     BlocProvider.of<FetchMakananCubit>(context).fetch();
+  }
+
+  void _delete(int id) {
+    // set up the button
+    Widget cancelButton = TextButton(
+      child: Text("Batal"),
+      onPressed: () => Navigator.pop(context),
+    );
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+        BlocProvider.of<DeleteMakananCubit>(context).delete(id: id);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Konfirmasi"),
+      content: Text("Anda yakin akan menghapus data ini?"),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -59,14 +90,32 @@ class _ListMakananPageState extends State<ListMakananPage> {
               children: <Widget>[
                 _buildSearchBar(),
                 const SizedBox(height: 56),
-                MyButton(
-                  onPressed: () => Navigator.pushNamed(
-                          context, inputMakananRoute)
-                      .then((value) =>
-                          BlocProvider.of<FetchMakananCubit>(context).fetch()),
-                  icon: Icons.add,
-                  text: 'Tambah',
-                ),
+                SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: Row(
+                      children: [
+                        MyButton(
+                          onPressed: () => Navigator.pushNamed(
+                                  context, inputMakananRoute)
+                              .then((value) =>
+                                  BlocProvider.of<FetchMakananCubit>(context)
+                                      .fetch()),
+                          icon: Icons.add,
+                          text: 'Tambah',
+                        ),
+                        const SizedBox(width: 16),
+                        MyButton(
+                          onPressed: () => Navigator.pushNamed(
+                                  context, stokMakananRoute)
+                              .then((value) =>
+                                  BlocProvider.of<FetchMakananCubit>(context)
+                                      .fetch()),
+                          icon: Icons.remove_red_eye_rounded,
+                          text: 'Stok',
+                        ),
+                      ],
+                    )),
                 const SizedBox(height: 11),
                 BlocConsumer<FetchMakananCubit, FetchMakananState>(
                   listener: (context, state) {
@@ -230,7 +279,7 @@ class _ListMakananPageState extends State<ListMakananPage> {
                 style: body2TextStyle,
               )),
               DataCell(Text(
-                data[i].detail,
+                listDot + data[i].detail,
                 style: body2TextStyle,
               )),
               DataCell(Image.network(
@@ -242,6 +291,23 @@ class _ListMakananPageState extends State<ListMakananPage> {
               DataCell(
                 Row(
                   children: <Widget>[
+                    SizedBox(
+                      width: 110,
+                      child: MyButton(
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailMakananPage(data: data[i]))).then(
+                            (value) =>
+                                BlocProvider.of<FetchMakananCubit>(context)
+                                    .fetch()),
+                        text: 'Detail',
+                        icon: Icons.remove_red_eye_rounded,
+                        color: mGreyColor,
+                      ),
+                    ),
+                    const SizedBox(width: 24),
                     SizedBox(
                       width: 110,
                       child: MyButton(
@@ -268,9 +334,7 @@ class _ListMakananPageState extends State<ListMakananPage> {
                     SizedBox(
                       width: 110,
                       child: MyButton(
-                        onPressed: () =>
-                            BlocProvider.of<DeleteMakananCubit>(context)
-                                .delete(id: data[i].id),
+                        onPressed: () => _delete(data[i].id),
                         text: 'Hapus',
                         icon: Icons.delete,
                         color: mDangerColor,

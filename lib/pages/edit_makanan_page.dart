@@ -104,16 +104,45 @@ class _EditMakananPageState extends State<EditMakananPage> {
   }
 
   void _submit() {
-    BlocProvider.of<UpdateMakananCubit>(context).update(
-      id: widget.id.toString(),
-      shift: _tfShiftController.text,
-      kategori: _selectedKategori,
-      stok: _tfStokController.text,
-      nama: _tfNamaController.text,
-      detail: _tfDetailController.text,
-      filename: _tfNamaController.text.replaceAll(' ', '_').toLowerCase(),
-      fileBase64: fileBase64,
-      fileExt: _tfUploadController.text.split('.').last,
+    // set up the button
+    Widget cancelButton = TextButton(
+      child: Text("Batal"),
+      onPressed: () => Navigator.pop(context),
+    );
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+        BlocProvider.of<UpdateMakananCubit>(context).update(
+          id: widget.id.toString(),
+          shift: _tfShiftController.text,
+          kategori: _selectedKategori,
+          stok: _tfStokController.text,
+          nama: _tfNamaController.text,
+          detail: _tfDetailController.text,
+          filename: _tfNamaController.text.replaceAll(' ', '_').toLowerCase(),
+          fileBase64: fileBase64,
+          fileExt: _tfUploadController.text.split('.').last,
+        );
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Konfirmasi"),
+      content: Text("Anda yakin akan menyimpan data ini?"),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
