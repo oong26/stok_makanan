@@ -86,37 +86,38 @@ class _ListMakananPageState extends State<ListMakananPage> {
           },
           child: SingleChildScrollView(
             child: Column(
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 _buildSearchBar(),
                 const SizedBox(height: 56),
-                SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: Row(
-                      children: [
-                        MyButton(
-                          onPressed: () => Navigator.pushNamed(
-                                  context, inputMakananRoute)
-                              .then((value) =>
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    MyButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, inputMakananRoute).then(
+                              (value) =>
                                   BlocProvider.of<FetchMakananCubit>(context)
                                       .fetch()),
-                          icon: Icons.add,
-                          text: 'Tambah',
-                        ),
-                        const SizedBox(width: 16),
-                        MyButton(
-                          onPressed: () => Navigator.pushNamed(
-                                  context, stokMakananRoute)
-                              .then((value) =>
+                      icon: Icons.add,
+                      text: 'Tambah',
+                    ),
+                    const SizedBox(width: 16),
+                    MyButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, stokMakananRoute).then(
+                              (value) =>
                                   BlocProvider.of<FetchMakananCubit>(context)
                                       .fetch()),
-                          icon: Icons.remove_red_eye_rounded,
-                          text: 'Stok',
-                        ),
-                      ],
-                    )),
-                const SizedBox(height: 11),
+                      icon: Icons.remove_red_eye_rounded,
+                      text: 'Stok',
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 BlocConsumer<FetchMakananCubit, FetchMakananState>(
                   listener: (context, state) {
                     if (state is FetchMakananError) {
@@ -145,7 +146,9 @@ class _ListMakananPageState extends State<ListMakananPage> {
                       data = state.data;
                     }
 
-                    return _buildTable(data);
+                    return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: _buildTable(data));
                   },
                 ),
               ],
@@ -195,6 +198,9 @@ class _ListMakananPageState extends State<ListMakananPage> {
         border: TableBorder.all(color: Colors.black, width: 1),
         columnSpacing: 20,
         dataRowHeight: 150,
+        headingRowColor:
+            MaterialStateColor.resolveWith((states) => Colors.blue),
+        dataRowColor: MaterialStateColor.resolveWith((states) => Colors.grey),
         columns: [
           DataColumn(
             label: Text(
