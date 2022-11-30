@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stok_makanan/cubit/delete_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/fetch_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/kurangi_stok_cubit.dart';
+import 'package:stok_makanan/cubit/load_detail_cubit.dart';
 import 'package:stok_makanan/cubit/store_makanan_cubit.dart';
 import 'package:stok_makanan/cubit/update_makanan_cubit.dart';
 import 'package:stok_makanan/pages/input_makanan_page.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
             create: (context) => FetchMakananCubit(MakananRepository())),
         BlocProvider(
             create: (context) => StoreMakananCubit(MakananRepository())),
+        BlocProvider(create: (context) => LoadDetailCubit(MakananRepository())),
         BlocProvider(
             create: (context) => DeleteMakananCubit(MakananRepository())),
         BlocProvider(

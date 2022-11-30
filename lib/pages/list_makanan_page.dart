@@ -304,7 +304,7 @@ class _ListMakananPageState extends State<ListMakananPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    DetailMakananPage(data: data[i]))).then(
+                                    DetailMakananPage(id: data[i].id))).then(
                             (value) =>
                                 BlocProvider.of<FetchMakananCubit>(context)
                                     .fetch()),

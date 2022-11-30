@@ -277,10 +277,6 @@ class _InputMakananPageState extends State<InputMakananPage> {
                             child: TextFormField(
                               controller: _tfNamaController,
                               decoration: InputDecoration(
-                                suffixIcon: const Icon(
-                                  Icons.keyboard_arrow_down_rounded,
-                                  color: Colors.black,
-                                ),
                                 label: Text(
                                   'Nama Menu',
                                   style: inputTextStyle.copyWith(

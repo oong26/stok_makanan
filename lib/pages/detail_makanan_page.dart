@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stok_makanan/cubit/kurangi_stok_cubit.dart';
+import 'package:stok_makanan/cubit/load_detail_cubit.dart';
 import 'package:stok_makanan/models/makanan_model.dart';
+import 'package:stok_makanan/models/tanggal_model.dart';
 import 'package:stok_makanan/utils/colors.dart';
 import 'package:stok_makanan/utils/constants.dart';
 import 'package:stok_makanan/utils/styles.dart';
@@ -12,9 +14,9 @@ import '../widgets/my_button.dart';
 class DetailMakananPage extends StatefulWidget {
   const DetailMakananPage({
     Key? key,
-    required this.data,
+    required this.id,
   }) : super(key: key);
-  final MakananModel data;
+  final int id;
 
   @override
   State<DetailMakananPage> createState() => _DetailMakananPageState();
@@ -22,6 +24,14 @@ class DetailMakananPage extends StatefulWidget {
 
 class _DetailMakananPageState extends State<DetailMakananPage> {
   final currentDate = DateTime.now();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    BlocProvider.of<LoadDetailCubit>(context).fetch(id: widget.id);
+  }
 
   void _kurangiStok() {
     // set up the button
@@ -33,7 +43,7 @@ class _DetailMakananPageState extends State<DetailMakananPage> {
       child: Text("OK"),
       onPressed: () {
         Navigator.pop(context);
-        BlocProvider.of<KurangiStokCubit>(context).subtract(id: widget.data.id);
+        BlocProvider.of<KurangiStokCubit>(context).subtract(id: widget.id);
       },
     );
 
@@ -63,7 +73,7 @@ class _DetailMakananPageState extends State<DetailMakananPage> {
       body: BlocListener<KurangiStokCubit, KurangiStokState>(
         listener: (context, state) {
           if (state is KurangiStokSuccess) {
-            Navigator.pop(context);
+            BlocProvider.of<LoadDetailCubit>(context).fetch(id: widget.id);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('Berhasil',
                   style:
@@ -85,46 +95,74 @@ class _DetailMakananPageState extends State<DetailMakananPage> {
             ));
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 30),
-                _buildHeaderSection(),
-                const SizedBox(height: 34),
-                MyButton(
-                  onPressed: () => _kurangiStok(),
-                  icon: Icons.remove,
-                  text: 'Kurangi 5 Stok',
+        child: BlocBuilder<LoadDetailCubit, LoadDetailState>(
+          builder: (context, state) {
+            MakananModel data = MakananModel(
+                id: 0,
+                shift: 0,
+                kategoriMenu: '',
+                stok: 0,
+                stokTemp: 0,
+                nama: '',
+                detail: '',
+                tanggal: TanggalModel(
+                    date: DateTime.now(), timezoneType: 0, timezone: ''),
+                gambar: '');
+
+            if (state is LoadDetailLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: mPrimaryColor,
                 ),
-                const SizedBox(
-                  height: 10,
+              );
+            }
+
+            if (state is LoadDetailSuccess) {
+              data = state.data;
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(height: 30),
+                    _buildHeaderSection(data),
+                    const SizedBox(height: 34),
+                    MyButton(
+                      onPressed: () => _kurangiStok(),
+                      icon: Icons.remove,
+                      text: 'Kurangi 5 Stok',
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Nama Menu : ${data.nama}',
+                      style: sectionTitleTextStyle,
+                    ),
+                    const SizedBox(height: 17),
+                    _buildDetailSection(data),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'Stock Menu : ${data.stok}/${data.stokTemp}',
+                        style: titleTextStyle.copyWith(fontSize: 48),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
                 ),
-                Text(
-                  'Nama Menu : ${widget.data.nama}',
-                  style: sectionTitleTextStyle,
-                ),
-                const SizedBox(height: 17),
-                _buildDetailSection(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'Stock Menu : ${widget.data.stok}/${widget.data.stokTemp}',
-                    style: titleTextStyle.copyWith(fontSize: 48),
-                  ),
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildHeaderSection() => Row(
+  Widget _buildHeaderSection(MakananModel data) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
@@ -138,7 +176,7 @@ class _DetailMakananPageState extends State<DetailMakananPage> {
           ),
           Expanded(
             child: Text(
-              widget.data.kategoriMenu,
+              data.kategoriMenu,
               style: titleTextStyle,
               textAlign: TextAlign.center,
             ),
@@ -147,21 +185,21 @@ class _DetailMakananPageState extends State<DetailMakananPage> {
             alignment: Alignment.centerRight,
             width: MediaQuery.of(context).size.width * 0.4,
             child: Text(
-              dayDateFormat.format(widget.data.tanggal.date),
+              dayDateFormat.format(data.tanggal.date),
               style: sectionTitleTextStyle.copyWith(fontSize: 36),
             ),
           ),
         ],
       );
 
-  Widget _buildDetailSection() => Wrap(
+  Widget _buildDetailSection(MakananModel data) => Wrap(
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
             child: Image.network(
-              ASSET_URL + widget.data.gambar,
+              ASSET_URL + data.gambar,
               width: 412,
               height: 412,
               fit: BoxFit.cover,
@@ -174,7 +212,7 @@ class _DetailMakananPageState extends State<DetailMakananPage> {
                 style: sectionTitleTextStyle,
                 children: [
                   TextSpan(
-                    text: '$listDot${widget.data.detail}\n',
+                    text: '$listDot${data.detail}\n',
                     style: sectionBodyTextStyle,
                   ),
                   // TextSpan(

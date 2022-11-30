@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:stok_makanan/models/detail_makanan_response_model.dart';
 import 'package:stok_makanan/models/list_makanan_model.dart';
 import 'package:stok_makanan/models/response_model.dart';
 import 'package:stok_makanan/utils/constants.dart';
@@ -31,6 +32,20 @@ class MakananRepository {
       debugPrint('Response error : $e');
 
       return responseModelFromJson(res.body);
+    }
+  }
+
+  Future<DetailMakananResponseModel> edit({required String id}) async {
+    var queryParams = {'id': id};
+    var url = Uri.http(DOMAIN, '/stok_makanan_api/edit.php', queryParams);
+    var res = await http.get(url, headers: defaultHeader);
+
+    try {
+      return detailMakananResponseModelFromJson(res.body);
+    } catch (e) {
+      debugPrint('Response error : $e');
+
+      return detailMakananResponseModelFromJson(res.body);
     }
   }
 
